@@ -1,4 +1,4 @@
-package com.apirest.finanzaspersonales.dao.imple.user;
+package com.apirest.finanzaspersonales.repository.imple.user;
 
 import com.apirest.finanzaspersonales.entity.User;
 import org.springframework.stereotype.Repository;
