@@ -1,6 +1,7 @@
-package com.apirest.finanzaspersonales.repository.imple.user;
+package com.apirest.finanzaspersonales.repository.user.imple;
 
 import com.apirest.finanzaspersonales.entity.User;
+import com.apirest.finanzaspersonales.repository.user.UserDao;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;

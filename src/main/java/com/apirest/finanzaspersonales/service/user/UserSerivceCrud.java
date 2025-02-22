@@ -1,6 +1,6 @@
 package com.apirest.finanzaspersonales.service.user;
 
-import com.apirest.finanzaspersonales.repository.imple.user.UserDao;
+import com.apirest.finanzaspersonales.repository.user.UserDao;
 import com.apirest.finanzaspersonales.entity.User;
 import com.apirest.finanzaspersonales.interfaces.user.UserServiceCrud;
 import org.springframework.beans.factory.annotation.Autowired;
