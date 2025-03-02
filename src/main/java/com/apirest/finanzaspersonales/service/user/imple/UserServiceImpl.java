@@ -1,5 +1,7 @@
 package com.apirest.finanzaspersonales.service.user.imple;
 
+import com.apirest.finanzaspersonales.exceptions.User.EmailAlreadyExistsException;
+import com.apirest.finanzaspersonales.exceptions.User.UserNotFoundException;
 import com.apirest.finanzaspersonales.repository.user.UserDao;
 import com.apirest.finanzaspersonales.entity.User;
 import com.apirest.finanzaspersonales.service.user.UserService;
@@ -17,27 +19,33 @@ public class UserServiceImpl implements UserService {
     private final UserDao userDao;
     private final List<User> users = new ArrayList<>();
 
-
     @Autowired
     public UserServiceImpl(UserDao userDao){
-
         this.userDao = userDao;
-
     }
 
     @Override
-    public void addUser(User user) {
-        userDao.save(user);
+    public Optional<User> getUserById(int userId) {
+        return Optional.ofNullable(userDao.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("Usuario con ID " + userId + " no encontrado")));
     }
 
     @Override
-    public void removeUser(int userId) {
-        Optional<User> user = userDao.findById(userId);
-        if (user.isPresent()) {
-            userDao.delete(userId);
-        } else {
-            throw new RuntimeException("Usuario no encontrado con ID: " + userId);
+    public List<User> getAllUsers() {
+        return userDao.findAll();
+    }
+
+    @Override
+    public User registerUser(User user) {
+        if (userDao.findByEmail(user.getEmail()) != null) {
+            throw new EmailAlreadyExistsException("El correo ya está registrado.");
         }
+
+        String hashedPassword = PasswordUtil.hashPassword(user.getPassword());
+        user.setPassword(hashedPassword);
+        userDao.save(user);
+
+        return user;
     }
 
     @Override
@@ -51,27 +59,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Optional<User> getUserById(int userId) {
-        return userDao.findById(userId);
-    }
-
-    @Override
-    public List<User> getAllUsers() {
-        return userDao.findAll();
-    }
-
-    @Override
-    public User registerUser(User user) {
-        if (userDao.findByEmail(user.getEmail()) != null) {
-            throw new RuntimeException("El correo ya está registrado.");
+    public void removeUser(int userId) {
+        if (!userDao.delete(userId)) {
+            throw new UserNotFoundException("Usuario con ID " + userId + " no encontrado.");
         }
-
-        String hashedPassword = PasswordUtil.hashPassword(user.getPassword());
-        user.setPassword(hashedPassword);
-        userDao.save(user);
-
-        return user;
     }
+
+
 
 
 }

@@ -6,7 +6,6 @@ public class User {
     private String email;
     private String password;
 
-
     public User(String username, String password, String email) {
         this.username = username;
         this.email = email;
@@ -32,6 +31,7 @@ public class User {
                 ", username='" + username + '\'' +
                 '}';
     }
+
     public String getPassword() {
         return password;
     }

@@ -55,6 +55,13 @@ import java.util.Optional;
             return updatedUser.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
         }
 
+        @DeleteMapping("/{id}")
+        public ResponseEntity<String> deleteUser(@PathVariable int id) {
+            userService.removeUser(id);
+            return ResponseEntity.ok("Usuario eliminado correctamente.");
+
+        }
+
         @GetMapping("/test")
         public String testEndpoint() {
             return "El endpoint está funcionando correctamente.";

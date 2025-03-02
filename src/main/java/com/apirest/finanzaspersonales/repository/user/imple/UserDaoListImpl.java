@@ -32,12 +32,12 @@ public class UserDaoListImpl implements UserDao {
     }
 
     @Override
-    public boolean update(User user) {
-        return findById(user.getId()).map(existing -> {
+    public void update(User user) {
+        findById(user.getId()).map(existing -> {
             users.remove(existing);
             users.add(user);
             return true;
-        }).orElse(false);
+        });
     }
 
     @Override

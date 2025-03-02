@@ -14,7 +14,7 @@ public interface UserDao {
 
     Optional<User> findById(int id);  // Busca un usuario por su ID.
 
-    boolean update(User user);  // Actualiza un usuario existente.
+    void update(User user);  // Actualiza un usuario existente.
 
     boolean delete(int id);  // Elimina un usuario por su ID.
 
