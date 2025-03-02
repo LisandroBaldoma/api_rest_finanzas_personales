@@ -8,7 +8,7 @@ import java.util.Optional;
 
 @Repository
 public interface UserDao {
-    int save(User user);  // Guarda un usuario y devuelve el ID generado.
+    void save(User user);  // Guarda un usuario y devuelve el ID generado.
 
     List<User> findAll();  // Obtiene todos los usuarios.
 
@@ -17,4 +17,8 @@ public interface UserDao {
     boolean update(User user);  // Actualiza un usuario existente.
 
     boolean delete(int id);  // Elimina un usuario por su ID.
+
+    User findByEmail(String email);
+
+
 }

@@ -12,11 +12,12 @@ import java.util.Optional;
 public class UserDaoListImpl implements UserDao {
 
     private final List<User> users = new ArrayList<>();
+    private static int idCounter = 1;
 
     @Override
-    public int save(User user) {
+    public void save(User user) {
+        user.setId(idCounter++); // Asigna y aumenta el contador
         users.add(user);
-        return user.getId();
     }
 
     @Override
@@ -42,5 +43,13 @@ public class UserDaoListImpl implements UserDao {
     @Override
     public boolean delete(int id) {
         return users.removeIf(user -> user.getId() == id);
+    }
+
+    @Override
+    public User findByEmail(String email) {
+        return users.stream()
+                .filter(user -> user.getEmail().equalsIgnoreCase(email))
+                .findFirst()
+                .orElse(null);
     }
 }
