@@ -2,7 +2,7 @@ package com.apirest.finanzaspersonales.entity;
 
 public class User {
     private int id;
-    private final String username;
+    private String username;
     private String email;
     private String password;
 
@@ -10,6 +10,10 @@ public class User {
         this.username = username;
         this.email = email;
         this.password = password;
+    }
+
+    public User() {
+
     }
 
     public void setId(int id) {
@@ -48,5 +52,7 @@ public class User {
         this.email = email;
     }
 
-
+    public void setUserName(String username) {
+        this.username = username;
+    }
 }
