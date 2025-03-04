@@ -1,7 +1,6 @@
 package com.apirest.finanzaspersonales.controller;
 
 import com.apirest.finanzaspersonales.entity.User;
-import com.apirest.finanzaspersonales.repository.user.imple.UserDaoJsonImpl;
 import com.apirest.finanzaspersonales.service.user.UserService;
 import com.apirest.finanzaspersonales.repository.user.imple.UserDaoListImpl;
 import com.apirest.finanzaspersonales.service.user.UserServiceQuery;
@@ -21,14 +20,11 @@ import java.util.Optional;
         private final UserService userService;
         private final UserServiceQuery userServiceQuery;
 
-        //public UserController(UserDaoListImpl userDaoImpl, UserService userService, UserServiceQuery userServiceQuery) {
-          //  this.userService = userService;
-            //this.userServiceQuery = userServiceQuery;
-        //}
-        public UserController(UserDaoJsonImpl userDaoImpl, UserService userService, UserServiceQuery userServiceQuery) {
+        public UserController(UserDaoListImpl userDaoImpl, UserService userService, UserServiceQuery userServiceQuery) {
             this.userService = userService;
             this.userServiceQuery = userServiceQuery;
         }
+
 
         // Obtener todos los usuarios
         @GetMapping

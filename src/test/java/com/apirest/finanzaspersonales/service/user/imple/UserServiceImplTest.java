@@ -3,7 +3,6 @@ package com.apirest.finanzaspersonales.service.user.imple;
 import com.apirest.finanzaspersonales.entity.User;
 import com.apirest.finanzaspersonales.exceptions.User.UserNotFoundException;
 import com.apirest.finanzaspersonales.repository.user.UserDao;
-import com.apirest.finanzaspersonales.repository.user.imple.UserDaoListImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
