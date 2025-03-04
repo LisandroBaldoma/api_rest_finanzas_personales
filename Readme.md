@@ -43,6 +43,19 @@ La API se organiza con las siguientes capas:
 - `UserNotFoundException`: Usuario no encontrado.
 - `EmailAlreadyExistsException`: Email ya registrado.
 
+### Selección de Implementación de `UserDao`
+
+Este proyecto soporta dos implementaciones para el acceso a los datos de los usuarios: **en memoria** (usando listas) y **en archivo JSON**. Puedes elegir cuál implementar a través del archivo de configuración `application.properties`.
+
+#### **1. Implementaciones Disponibles**
+- **`UserDaoListImpl`**: Implementación en memoria usando listas. Los datos se pierden cuando la aplicación se detiene.
+- **`UserDaoJsonImpl`**: Implementación que almacena los datos en un archivo JSON. Los datos se mantienen entre ejecuciones de la aplicación.
+
+#### **2. Selección de Implementación a través de `application.properties`**
+
+Puedes configurar la implementación de `UserDao` modificando el archivo `application.properties`. Cambia la propiedad `app.userdao.impl` entre las opciones `list` o `json` para elegir cuál de las implementaciones usar.
+
+
 ### Próximas Implementaciones
 - Pruebas unitarias con **JUnit 5**.
 - Simulación de persistencia con base de datos H2.

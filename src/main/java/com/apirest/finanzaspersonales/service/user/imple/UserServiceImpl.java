@@ -17,7 +17,7 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
 
     private final UserDao userDao;
-    private final List<User> users = new ArrayList<>();
+    //private final List<User> users = new ArrayList<>();
 
     @Autowired
     public UserServiceImpl(UserDao userDao){
