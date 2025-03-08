@@ -1,6 +1,7 @@
 package com.apirest.finanzaspersonales.repository.user.imple;
 
 import com.apirest.finanzaspersonales.entity.User;
+import com.apirest.finanzaspersonales.exceptions.User.InvalidUserException;
 import com.apirest.finanzaspersonales.repository.user.UserDao;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -30,6 +31,9 @@ public class UserDaoJsonImpl implements UserDao {
 
     @Override
     public void save(User user) {
+        if (user == null) {
+            throw new InvalidUserException("User cannot be null");
+        }
         user.setId(idCounter++);
         users.add(user);
         saveUsersToFile();
@@ -47,6 +51,9 @@ public class UserDaoJsonImpl implements UserDao {
 
     @Override
     public void update(User user) {
+        if (user == null) {
+            throw new InvalidUserException("User cannot be null");
+        }
         findById(user.getId()).ifPresent(existing -> {
             users.remove(existing);
             users.add(user);
@@ -90,5 +97,11 @@ public class UserDaoJsonImpl implements UserDao {
         } catch (IOException e) {
             System.err.println("Error al escribir el archivo JSON: " + e.getMessage());
         }
+    }
+
+    // Método para reiniciar el contador y limpiar la lista (útil para tests)
+    public void reset() {
+        users.clear();
+        idCounter = 1;
     }
 }

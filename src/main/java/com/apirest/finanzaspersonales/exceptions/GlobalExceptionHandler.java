@@ -1,6 +1,7 @@
 package com.apirest.finanzaspersonales.exceptions;
 
 import com.apirest.finanzaspersonales.exceptions.User.EmailAlreadyExistsException;
+import com.apirest.finanzaspersonales.exceptions.User.InvalidUserException;
 import com.apirest.finanzaspersonales.exceptions.User.UserNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +19,11 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<String> handleUserNotFound(UserNotFoundException e) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+    }
+
+    @ExceptionHandler(InvalidUserException.class)
+    public ResponseEntity<String> handleInvalidUser(InvalidUserException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
     }
 
     @ExceptionHandler(RuntimeException.class)

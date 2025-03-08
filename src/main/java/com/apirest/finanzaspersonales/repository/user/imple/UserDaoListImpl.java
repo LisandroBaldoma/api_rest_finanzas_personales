@@ -1,6 +1,7 @@
 package com.apirest.finanzaspersonales.repository.user.imple;
 
 import com.apirest.finanzaspersonales.entity.User;
+import com.apirest.finanzaspersonales.exceptions.User.InvalidUserException;
 import com.apirest.finanzaspersonales.repository.user.UserDao;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Repository;
@@ -17,6 +18,9 @@ public class UserDaoListImpl implements UserDao {
 
     @Override
     public void save(User user) {
+        if (user == null) {
+            throw new InvalidUserException("User cannot be null");
+        }
         user.setId(idCounter++); // Asigna y aumenta el contador
         users.add(user);
     }
@@ -34,6 +38,10 @@ public class UserDaoListImpl implements UserDao {
 
     @Override
     public void update(User user) {
+        if (user == null) {
+            throw new InvalidUserException("User cannot be null");
+        }
+
         findById(user.getId()).map(existing -> {
             users.remove(existing);
             users.add(user);
@@ -48,9 +56,16 @@ public class UserDaoListImpl implements UserDao {
 
     @Override
     public User findByEmail(String email) {
+
         return users.stream()
                 .filter(user -> user.getEmail().equalsIgnoreCase(email))
                 .findFirst()
                 .orElse(null);
+    }
+
+    // Método para reiniciar el contador y limpiar la lista (útil para tests)
+    public void reset() {
+        users.clear();
+        idCounter = 1;
     }
 }
