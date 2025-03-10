@@ -55,9 +55,8 @@ public class UserDaoJsonImpl implements UserDao {
             throw new InvalidUserException("User cannot be null");
         }
         findById(user.getId()).ifPresent(existing -> {
-            users.remove(existing);
-            users.add(user);
-            saveUsersToFile();
+            existing.setUserName(user.getUsername()); // Solo actualiza el username
+            saveUsersToFile(); // Guarda los cambios en el archivo JSON
         });
     }
 

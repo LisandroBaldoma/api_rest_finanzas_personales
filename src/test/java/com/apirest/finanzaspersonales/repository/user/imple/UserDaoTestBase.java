@@ -69,7 +69,7 @@ public abstract class UserDaoTestBase {
     }
 
     @Test
-    @DisplayName("Actualizar un usuario modifica sus datos correctamente")
+    @DisplayName("Actualizar un usuario, modifica sus datos correctamente")
     void testUpdateUser() {
         User user = new User();
         user.setUserName("John Doe");
@@ -89,6 +89,34 @@ public abstract class UserDaoTestBase {
         assertTrue(foundUser.isPresent());
         assertEquals("John Updated", foundUser.get().getUsername());
         assertEquals("john.updated@example.com", foundUser.get().getEmail());
+    }
+
+    @Test
+    @DisplayName("Debe actualizar solo el username sin modificar email ni password")
+    void updateUsername_shouldUpdateOnlyUsername() {
+        // Arrange
+        User user = new User();
+        user.setId(1);
+        user.setUserName("oldUsername");
+        user.setEmail("test@example.com");
+        user.setPassword("hashedPassword");
+
+        userDao.save(user);
+
+        // Act
+        User updatedUser = new User();
+        updatedUser.setId(1);
+        updatedUser.setUserName("newUsername"); // Solo cambia el username
+        userDao.update(updatedUser);
+
+        // Assert
+        Optional<User> result = userDao.findById(1);
+        assertTrue(result.isPresent());
+
+        User userFromDao = result.get();
+        assertEquals("newUsername", userFromDao.getUsername()); // Se actualiza el username
+        assertEquals("test@example.com", userFromDao.getEmail()); // No cambia el email
+        assertEquals("hashedPassword", userFromDao.getPassword()); // No cambia la contraseña
     }
 
     @Test

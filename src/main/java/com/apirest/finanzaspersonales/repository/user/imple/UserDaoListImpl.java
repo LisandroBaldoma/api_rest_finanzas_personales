@@ -42,10 +42,8 @@ public class UserDaoListImpl implements UserDao {
             throw new InvalidUserException("User cannot be null");
         }
 
-        findById(user.getId()).map(existing -> {
-            users.remove(existing);
-            users.add(user);
-            return true;
+        findById(user.getId()).ifPresent(existing -> {
+            existing.setUserName(user.getUsername()); // Solo actualiza el username
         });
     }
 
