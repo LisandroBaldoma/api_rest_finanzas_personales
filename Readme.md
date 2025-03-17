@@ -3,26 +3,34 @@
 ## Descripción del Proyecto
 Este proyecto consiste en una API para la gestión de usuarios en una aplicación de finanzas personales. El objetivo es aplicar conceptos fundamentales de desarrollo backend con **Java** utilizando el framework **Spring Boot**, con una arquitectura organizada por capas.
 
-### Funcionalidades Implementadas
+## Manejo de Datos en la Aplicación
+Para evitar exponer directamente los modelos de la aplicación al cliente, se ha implementado una capa adicional de DTOs (**Data Transfer Objects**). Esta estrategia permite mejorar la seguridad y flexibilidad de la API. Se utilizan dos tipos de DTOs:
+
+- **`UserRequestDTO`**: Contiene los datos que se reciben en las solicitudes, asegurando que solo la información relevante sea enviada desde el cliente.
+- **`UserResponseDTO`**: Define la estructura de los datos devueltos al cliente, ocultando información sensible como contraseñas y garantizando un formato de respuesta controlado.
+
+El mapeo entre entidades y DTOs se realiza mediante métodos privados en los controladores, asegurando una conversión adecuada de los datos en cada punto de la aplicación.
+
+## Funcionalidades Implementadas
 - Gestión de usuarios con operaciones CRUD (Crear, Leer, Actualizar, Eliminar).
 - Consultas personalizadas para búsqueda de usuarios por nombre y email.
 - Validaciones de datos con **@Valid** para asegurar la integridad de la información.
 - Manejo global de excepciones con **GlobalExceptionHandler**.
 - Simulación de persistencia con una lista en memoria.
 
-### Arquitectura
+## Arquitectura
 La API se organiza con las siguientes capas:
 
 - **Entity:** Representa los objetos del modelo de dominio.
 - **Repository:** Define las operaciones de persistencia (DAO).
 - **Service:** Contiene la lógica de negocio dividida en dos servicios:
-    - `UserServiceImpl`: CRUD y lógica de negocio básica.
-    - `UserServiceQueryImpl`: Consultas personalizadas.
+  - `UserServiceImpl`: CRUD y lógica de negocio básica.
+  - `UserServiceQueryImpl`: Consultas personalizadas.
 - **Controller:** Gestiona las solicitudes HTTP y las respuestas.
 - **Config:** Configuración de excepciones globales y validaciones.
 
-### Endpoints Disponibles
-#### Usuarios
+## Endpoints Disponibles
+### Usuarios
 - **POST /api/v1/users/register**: Registrar usuario.
 - **GET /api/v1/users**: Obtener todos los usuarios.
 - **GET /api/v1/users/{id}**: Obtener usuario por ID.
@@ -33,41 +41,68 @@ La API se organiza con las siguientes capas:
 - **GET /api/v1/users/count**: Contar todos los usuarios.
 - **GET /api/v1/users/by-name?name=**: Buscar usuarios por nombre.
 
-### Validaciones
+## Validaciones
 - El modelo **User** aplica las siguientes restricciones:
-    - `@NotBlank` para campos obligatorios.
-    - `@Email` para validar formato de email.
-    - `@Size` para limitar la longitud de cadenas.
+  - `@NotBlank` para campos obligatorios.
+  - `@Email` para validar formato de email.
+  - `@Size` para limitar la longitud de cadenas.
 
-### Excepciones Personalizadas
+## Excepciones Personalizadas
 - `UserNotFoundException`: Usuario no encontrado.
 - `EmailAlreadyExistsException`: Email ya registrado.
 
-### Selección de Implementación de `UserDao`
+## Selección de Implementación de `UserDao`
 
 Este proyecto soporta dos implementaciones para el acceso a los datos de los usuarios: **en memoria** (usando listas) y **en archivo JSON**. Puedes elegir cuál implementar a través del archivo de configuración `application.properties`.
 
-#### **1. Implementaciones Disponibles**
+### **1. Implementaciones Disponibles**
 - **`UserDaoListImpl`**: Implementación en memoria usando listas. Los datos se pierden cuando la aplicación se detiene.
 - **`UserDaoJsonImpl`**: Implementación que almacena los datos en un archivo JSON. Los datos se mantienen entre ejecuciones de la aplicación.
 
-#### **2. Selección de Implementación a través de `application.properties`**
-
+### **2. Selección de Implementación a través de `application.properties`**
 Puedes configurar la implementación de `UserDao` modificando el archivo `application.properties`. Cambia la propiedad `app.userdao.impl` entre las opciones `list` o `json` para elegir cuál de las implementaciones usar.
 
+## Consola H2
+La aplicación permite visualizar y gestionar la base de datos en memoria mediante la consola H2. Para acceder, inicia la aplicación y visita:
 
-### Próximas Implementaciones
+```
+http://localhost:8080/h2-console
+```
+
+### **Configuración para acceder a la consola H2:**
+- **JDBC URL:** `jdbc:h2:mem:testdb`
+- **Usuario:** `sa`
+- **Contraseña:** *(dejar en blanco)*
+
+Esta herramienta es útil para verificar los datos almacenados y realizar consultas directamente sobre la base de datos.
+
+## Cómo Ejecutar la Aplicación desde el IDE
+Además de ejecutar la aplicación con Maven desde la terminal, también puedes iniciarla directamente desde tu IDE (IntelliJ IDEA o Eclipse) siguiendo estos pasos:
+
+### **Ejecutar desde IntelliJ IDEA**
+1. Abrir el proyecto en IntelliJ IDEA.
+2. En la ventana de `Project Explorer`, ubicar la clase principal con la anotación `@SpringBootApplication`.
+3. Hacer clic derecho sobre la clase y seleccionar `Run 'NombreDeLaClase'`.
+
+### **Ejecutar desde Eclipse**
+1. Abrir el proyecto en Eclipse.
+2. En la vista `Package Explorer`, ubicar la clase principal con `@SpringBootApplication`.
+3. Hacer clic derecho sobre la clase y seleccionar `Run As -> Spring Boot App`.
+
+Este método es recomendable para desarrollo y depuración rápida de la aplicación.
+
+## Próximas Implementaciones
 - Pruebas unitarias con **JUnit 5**.
 - Simulación de persistencia con base de datos H2.
 - Mocking de servicios con **Mockito**.
 - Documentación con **Swagger**.
 
-### Requisitos para Ejecutar el Proyecto
+## Requisitos para Ejecutar el Proyecto
 - Java 17 o superior.
 - Maven.
 - IntelliJ IDEA o cualquier IDE compatible con Spring Boot.
 
-### Cómo Ejecutar el Proyecto
+## Cómo Ejecutar el Proyecto
 1. Clonar el repositorio.
 2. Navegar a la raíz del proyecto.
 3. Ejecutar el siguiente comando:
@@ -76,7 +111,7 @@ Puedes configurar la implementación de `UserDao` modificando el archivo `applic
    ```
 4. Acceder a la API en: `http://localhost:8080/api/v1/users/test`
 
-### Autor
+## Autor
 Desarrollado por: **Lisandro Baldomá**
 
 ---

@@ -1,8 +1,10 @@
 package com.apirest.finanzaspersonales.service.user.imple;
 
+import com.apirest.finanzaspersonales.controller.model.response.UserResponse;
 import com.apirest.finanzaspersonales.entity.User;
 import com.apirest.finanzaspersonales.exceptions.User.UserNotFoundException;
 import com.apirest.finanzaspersonales.repository.user.UserDao;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -22,6 +24,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
+
 class UserSeriviceQueryImplTest {
 
     @Mock
@@ -30,72 +33,71 @@ class UserSeriviceQueryImplTest {
     @InjectMocks
     private UserSeriviceQueryImpl userServiceQuery;
 
+    private User user;
+    private UserResponse userResponse;
+
+    @BeforeEach
+    void setUp() {
+        user = new User();
+        user.setEmail("licha@mail.com");
+        user.setUserName("Licha");
+        user.setPassword("password");
+
+        userResponse = new UserResponse("Licha", "licha@mail.com");
+    }
 
     @Test
     @DisplayName("Should return true if email exists in database")
     void emailExists_shouldReturnTrue_whenEmailIsFound() {
-        // Arrange
-        String email = "test@example.com";
-        User mockUser = new User();
-        mockUser.setEmail(email);
+        when(userDao.findByEmail(user.getEmail())).thenReturn(user);
 
-        when(userDao.findByEmail(email)).thenReturn(mockUser);
+        boolean result = userServiceQuery.emailExists(user.getEmail());
 
-        // Act
-        boolean result = userServiceQuery.emailExists(email);
-
-        // Assert
         assertTrue(result);
-        verify(userDao).findByEmail(email);
+        verify(userDao).findByEmail(user.getEmail());
     }
 
     @Test
-    @DisplayName("Should return null if email don't exists in database")
+    @DisplayName("Should return false if email doesn't exist in database")
     void emailExists_shouldReturnFalse_whenEmailIsNotFound() {
         when(userDao.findByEmail(anyString())).thenReturn(null);
 
-        assertFalse(userServiceQuery.emailExists("notfound@example.com"));
-        verify(userDao).findByEmail("notfound@example.com");
+        assertFalse(userServiceQuery.emailExists("notfound@mail.com"));
+        verify(userDao).findByEmail("notfound@mail.com");
     }
 
     @Test
-    @DisplayName("Should return user when email is found, otherwise throw exception")
-    void getUserByEmail_shouldReturnUser_whenEmailExists() {
-        String email = "user@example.com";
-        User mockUser = new User();
-        mockUser.setEmail(email);
+    @DisplayName("Should return UserResponse when email is found, otherwise throw exception")
+    void getUserByEmail_shouldReturnUserResponse_whenEmailExists() {
+        when(userDao.findByEmail(user.getEmail())).thenReturn(user);
 
-        when(userDao.findByEmail(email)).thenReturn(mockUser);
-
-        User result = userServiceQuery.getUserByEmail(email);
+        UserResponse result = userServiceQuery.getUserByEmail(user.getEmail());
 
         assertNotNull(result);
-        assertEquals(email, result.getEmail());
-        verify(userDao).findByEmail(email);
+        assertEquals(userResponse.getEmail(), result.getEmail());
+        verify(userDao).findByEmail(user.getEmail());
     }
 
     @Test
+    @DisplayName("Should throw UserNotFoundException when user is not found by email")
     void getUserByEmail_shouldThrowException_whenUserNotFound() {
-        String email = "notfound@example.com";
+        when(userDao.findByEmail(anyString())).thenReturn(null);
 
-        when(userDao.findByEmail(email)).thenReturn(null);
-
-        assertThrows(UserNotFoundException.class, () -> userServiceQuery.getUserByEmail(email));
-        verify(userDao).findByEmail(email);
+        assertThrows(UserNotFoundException.class, () -> userServiceQuery.getUserByEmail("notfound@mail.com"));
+        verify(userDao).findByEmail("notfound@mail.com");
     }
 
     @Test
     @DisplayName("Should return true if user ID exists")
     void existsById_shouldReturnTrue_whenUserExists() {
-        int userId = 1;
+        when(userDao.findById(1)).thenReturn(Optional.of(user));
 
-        when(userDao.findById(userId)).thenReturn(Optional.of(new User()));
-
-        assertTrue(userServiceQuery.existsById(userId));
-        verify(userDao).findById(userId);
+        assertTrue(userServiceQuery.existsById(1));
+        verify(userDao).findById(1);
     }
 
     @Test
+    @DisplayName("Should return false if user ID does not exist")
     void existsById_shouldReturnFalse_whenUserDoesNotExist() {
         when(userDao.findById(anyInt())).thenReturn(Optional.empty());
 
@@ -106,10 +108,7 @@ class UserSeriviceQueryImplTest {
     @Test
     @DisplayName("Should return total number of users in database")
     void countUsers_shouldReturnCorrectCount() {
-        List<User> users = new ArrayList<>();
-        users.add(new User());
-        users.add(new User());
-        users.add(new User());
+        List<User> users = List.of(new User(), new User(), new User());
 
         when(userDao.findAll()).thenReturn(users);
 
@@ -118,18 +117,19 @@ class UserSeriviceQueryImplTest {
     }
 
     @Test
-    @DisplayName("Should return users matching given name, otherwise throw exception")
-    void findByName_shouldReturnUsers_whenUsersExist() {
-        String name = "John";
-        List<User> mockUsers = new ArrayList<>();
-        mockUsers.add(new User("John", "admin", "john@example.com"));
-        mockUsers.add(new User("John", "admin", "john@example.com"));
+    @DisplayName("Should return list of UserResponses matching given name")
+    void findByName_shouldReturnUserResponses_whenUsersExist() {
+        List<User> mockUsers = List.of(
+                new User("John", "john1@example.com", "password"),
+                new User("John", "john2@example.com", "password")
+        );
 
         when(userDao.findAll()).thenReturn(mockUsers);
 
-        List<User> result = userServiceQuery.findByName(name);
+        List<UserResponse> result = userServiceQuery.findByName("John");
 
         assertEquals(2, result.size());
+        assertEquals("John", result.get(0).getUsername());
         verify(userDao).findAll();
     }
 

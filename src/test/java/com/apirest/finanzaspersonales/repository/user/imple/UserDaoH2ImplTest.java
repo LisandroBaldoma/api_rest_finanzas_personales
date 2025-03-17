@@ -8,6 +8,7 @@ import org.springframework.test.context.TestPropertySource;
 
 import static org.junit.jupiter.api.Assertions.*;
 // TODO: CONFIGURAR EL TEST PARA H2 IMPLEMENTATION
+
 @SpringBootTest
 @TestPropertySource(locations = "classpath:application-test.properties")
 class UserDaoH2ImplTest extends UserDaoTestBase{

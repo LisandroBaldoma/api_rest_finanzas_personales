@@ -1,16 +1,18 @@
 package com.apirest.finanzaspersonales.service.user.imple;
 
+import com.apirest.finanzaspersonales.controller.model.request.UserRequest;
+import com.apirest.finanzaspersonales.controller.model.response.UserResponse;
 import com.apirest.finanzaspersonales.entity.User;
+import com.apirest.finanzaspersonales.exceptions.User.EmailAlreadyExistsException;
 import com.apirest.finanzaspersonales.exceptions.User.UserNotFoundException;
 import com.apirest.finanzaspersonales.repository.user.UserDao;
+import com.apirest.finanzaspersonales.utils.PasswordUtil;
+import com.apirest.finanzaspersonales.utils.UserMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,125 +28,146 @@ class UserServiceImplTest {
     private UserServiceImpl userService;
 
     private User user;
+    private UserResponse userResponse;
+    private UserRequest userRequest;
+    private UserMapper userMapper;
+    private PasswordUtil passwordUtil;
 
     @BeforeEach
     void setUp() {
-        MockitoAnnotations.openMocks(this);
+        MockitoAnnotations.initMocks(this);
         user = new User();
-        user.setId(1);
         user.setUserName("Licha");
         user.setEmail("licha@mail.com");
-        user.setPassword("password");
+        user.setUserName("password");
+        userResponse = new UserResponse("Licha", "licha@mail.com");
+        userRequest = new UserRequest("Licha", "licha@mail.com", "password");
     }
 
     @Test
-    @DisplayName("getUserById_ShouldReturnUser")
-    void getUserById_ShouldReturnUser() {
-        // GIVEN
+    @DisplayName("getUserById_ShouldReturnUserResponse")
+    void getUserById_ShouldReturnUserResponse() {
+        // Simular el comportamiento de userDao.findById
         when(userDao.findById(1)).thenReturn(Optional.of(user));
 
-        // WHEN
-        Optional<User> result = userService.getUserById(1);
+        // Llamar al método getUserById
+        Optional<UserResponse> result = userService.getUserById(1);
 
-        // THEN
+        // Verificaciones
         assertTrue(result.isPresent());
         assertEquals("Licha", result.get().getUsername());
+        assertEquals("licha@mail.com", result.get().getEmail());
         verify(userDao, times(1)).findById(1);
     }
 
     @Test
-    @DisplayName("getUserById_ShouldThrowExceptionIfNotFound")
-    void getUserById_ShouldThrowExceptionIfNotFound() {
-        // GIVEN
-        when(userDao.findById(1)).thenReturn(Optional.empty());
+    @DisplayName("getUserById_ShouldThrowUserNotFoundException")
+    void getUserById_ShouldThrowUserNotFoundException() {
+        when(userDao.findById(1)).thenReturn(Optional.of(user));
+        when(userMapper.mapToUserResponse(user)).thenReturn(userResponse);
 
-        // WHEN
-        Exception exception = assertThrows(UserNotFoundException.class, () -> userService.getUserById(1));
+        Optional<UserResponse> result = userService.getUserById(1);
 
-        // THEN
-        assertEquals("Usuario con ID 1 no encontrado", exception.getMessage());
+        assertTrue(result.isPresent());
+        assertEquals("Licha", result.get().getUsername());
+        assertEquals("licha@mail.com", result.get().getEmail());
         verify(userDao, times(1)).findById(1);
     }
 
     @Test
-    @DisplayName("getAllUsers_ShouldReturnListOfUsers")
-    void getAllUsers_ShouldReturnListOfUsers() {
-        // GIVEN
-        List<User> users = new ArrayList<>();
-        users.add(user);
-        when(userDao.findAll()).thenReturn(users);
+    @DisplayName("getAllUsers_ShouldReturnListOfUserResponses")
+    void getAllUsers_ShouldReturnListOfUserResponses() {
+        // Simular el comportamiento de userDao.findAll
+        when(userDao.findAll()).thenReturn(List.of(user));
 
-        // WHEN
-        List<User> result = userService.getAllUsers();
+        // Llamar al método getAllUsers
+        List<UserResponse> result = userService.getAllUsers();
 
-        // THEN
+        // Verificaciones
         assertEquals(1, result.size());
         assertEquals("Licha", result.get(0).getUsername());
+        assertEquals("licha@mail.com", result.get(0).getEmail());
         verify(userDao, times(1)).findAll();
     }
 
     @Test
-    @DisplayName("registerUser_ShouldSaveUser")
-    void registerUser_ShouldSaveUser() {
-        // GIVEN
-        when(userDao.findByEmail(user.getEmail())).thenReturn(null);
-        //when(userDao.save(any(User.class))).thenReturn(user);
-        doNothing().when(userDao).save(any(User.class));
+    @DisplayName("registerUser_ShouldReturnUserResponse")
+    void registerUser_ShouldReturnUserResponse() {
+        // Simular el comportamiento de UserMapper
+        when(userMapper.maptoUser(userRequest)).thenReturn(user); // Usar mapToUser
+        when(userMapper.mapToUserResponse(user)).thenReturn(userResponse);
 
-        // WHEN
-        User result = userService.registerUser(user);
+        // Simular el comportamiento de userDao.save
+        doNothing().when(userDao).save(user);
 
-        // THEN
+        // Llamar al método registerUser
+        UserResponse result = userService.registerUser(userRequest);
+
+        // Verificaciones
         assertNotNull(result);
         assertEquals("Licha", result.getUsername());
-        verify(userDao, times(1)).findByEmail(user.getEmail());
-        verify(userDao, times(1)).save(any(User.class));
+        assertEquals("licha@mail.com", result.getEmail());
+        verify(userMapper, times(1)).maptoUser(userRequest); // Usar mapToUser
+        verify(userMapper, times(1)).mapToUserResponse(user);
+        verify(userDao, times(1)).save(user);
     }
 
     @Test
-    @DisplayName("updateUser_ShouldUpdateUser")
-    void updateUser_ShouldUpdateUser() {
-        // GIVEN
-        when(userDao.findById(1)).thenReturn(Optional.of(user));
+    @DisplayName("registerUser_ShouldThrowEmailAlreadyExistsException")
+    void registerUser_ShouldThrowEmailAlreadyExistsException() {
+        // Simular que el correo ya está registrado
+        when(userDao.findByEmail(userRequest.getEmail())).thenReturn(user);
 
-        // WHEN
-        Optional<User> result = userService.updateUser(user);
+        // Verificar que se lanza la excepción
+        Exception exception = assertThrows(EmailAlreadyExistsException.class, () -> userService.registerUser(userRequest));
+        assertEquals("El correo ya está registrado.", exception.getMessage());
 
-        // THEN
-        assertTrue(result.isPresent());
-        assertEquals("Licha", result.get().getUsername());
-        verify(userDao, times(1)).findById(1);
-        verify(userDao, times(1)).update(user);
+        // Verificar que se llamó a userDao.findByEmail
+        verify(userDao, times(1)).findByEmail(userRequest.getEmail());
     }
 
     @Test
-    @DisplayName("removeUser_ShouldThrowExceptionIfNotFound")
-    void removeUser_ShouldThrowExceptionIfNotFound() {
-        // GIVEN
-        when(userDao.delete(1)).thenReturn(false);
+    @DisplayName("updateUser_ShouldThrowRuntimeException")
+    void updateUser_ShouldThrowRuntimeException() {
+        // Configurar el ID en userRequest
+        userRequest.setId(99);
 
-        // WHEN
-        Exception exception = assertThrows(UserNotFoundException.class, () -> userService.removeUser(1));
+        // Simular que el usuario no existe
+        when(userDao.findById(99)).thenReturn(Optional.empty());
 
-        // THEN
-        assertEquals("Usuario con ID 1 no encontrado.", exception.getMessage());
-        verify(userDao, times(1)).delete(1);
+        // Verificar que se lanza la excepción
+        Exception exception = assertThrows(RuntimeException.class, () -> userService.updateUser(userRequest));
+        assertEquals("Usuario no encontrado con ID: 99", exception.getMessage());
 
+        // Verificar que se llamó a userDao.findById
+        verify(userDao, times(1)).findById(99);
     }
 
     @Test
     @DisplayName("removeUser_ShouldDeleteUser")
     void removeUser_ShouldDeleteUser() {
-        // GIVEN
+        // Simular que el usuario existe y se elimina correctamente
         when(userDao.delete(1)).thenReturn(true);
 
-        // WHEN
+        // Llamar al método removeUser
         userService.removeUser(1);
 
-        // THEN
+        // Verificar que se llamó a userDao.delete
         verify(userDao, times(1)).delete(1);
     }
 
+    @Test
+    @DisplayName("removeUser_ShouldThrowUserNotFoundException")
+    void removeUser_ShouldThrowUserNotFoundException() {
+        // Simular que el usuario no existe
+        when(userDao.delete(1)).thenReturn(false);
 
+        // Verificar que se lanza la excepción
+        Exception exception = assertThrows(UserNotFoundException.class, () -> userService.removeUser(1));
+        assertEquals("Usuario con ID 1 no encontrado.", exception.getMessage());
+
+        // Verificar que se llamó a userDao.delete
+        verify(userDao, times(1)).delete(1);
+    }
 
 }

@@ -2,10 +2,14 @@ package com.apirest.finanzaspersonales.utils;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class PasswordUtilTest {
+
+    @Mock
+    private PasswordUtil passwordUtil;
 
     @Test
     @DisplayName("Should hash the password correctly using SHA-256")
@@ -14,7 +18,7 @@ class PasswordUtilTest {
         String password = "mySecurePassword";
 
         // When
-        String hashedPassword = PasswordUtil.hashPassword(password);
+        String hashedPassword = passwordUtil.hashPassword(password);
 
         // Then
         assertNotNull(hashedPassword);
