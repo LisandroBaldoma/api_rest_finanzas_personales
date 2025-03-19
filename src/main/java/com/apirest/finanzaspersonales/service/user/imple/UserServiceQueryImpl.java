@@ -1,6 +1,5 @@
 package com.apirest.finanzaspersonales.service.user.imple;
 
-import com.apirest.finanzaspersonales.controller.model.request.UserRequest;
 import com.apirest.finanzaspersonales.controller.model.response.UserResponse;
 import com.apirest.finanzaspersonales.entity.User;
 import com.apirest.finanzaspersonales.exceptions.User.UserNotFoundException;
@@ -14,13 +13,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class UserSeriviceQueryImpl implements UserServiceQuery {
+public class UserServiceQueryImpl implements UserServiceQuery {
 
     private final UserDao userDao;
     private final UserMapper userMapper;
 
     @Autowired
-    public UserSeriviceQueryImpl(UserDao userDao, UserMapper userMapper) {
+    public UserServiceQueryImpl(UserDao userDao, UserMapper userMapper) {
         this.userDao = userDao;
         this.userMapper = userMapper;
     }
@@ -62,6 +61,7 @@ public class UserSeriviceQueryImpl implements UserServiceQuery {
     @Override
     public List<UserResponse> findByName(String name) {
         List<User> users = userDao.findAll();
+        System.out.println("Usuarios obtenidos: " + users);
         List<User> result = users.stream()
                 .filter(user -> user.getUsername().equalsIgnoreCase(name))
                 .toList();

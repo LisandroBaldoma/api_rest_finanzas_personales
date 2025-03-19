@@ -4,6 +4,7 @@ import com.apirest.finanzaspersonales.controller.model.response.UserResponse;
 import com.apirest.finanzaspersonales.entity.User;
 import com.apirest.finanzaspersonales.exceptions.User.UserNotFoundException;
 import com.apirest.finanzaspersonales.repository.user.UserDao;
+import com.apirest.finanzaspersonales.utils.UserMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -11,27 +12,30 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.test.context.TestPropertySource;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+@TestPropertySource(locations = "classpath:application-test.properties")
 @ExtendWith(MockitoExtension.class)
 
-class UserSeriviceQueryImplTest {
+class UserServiceQueryImplTest {
 
     @Mock
     private UserDao userDao;
 
+    @Mock
+    private UserMapper userMapper; // Mockear el UserMapper
+
     @InjectMocks
-    private UserSeriviceQueryImpl userServiceQuery;
+    private UserServiceQueryImpl userServiceQuery;
 
     private User user;
     private UserResponse userResponse;
@@ -69,13 +73,19 @@ class UserSeriviceQueryImplTest {
     @Test
     @DisplayName("Should return UserResponse when email is found, otherwise throw exception")
     void getUserByEmail_shouldReturnUserResponse_whenEmailExists() {
+
+        // Simula la respuesta de userDao
         when(userDao.findByEmail(user.getEmail())).thenReturn(user);
 
+
+        // Llamar al método getUserByEmail
         UserResponse result = userServiceQuery.getUserByEmail(user.getEmail());
 
-        assertNotNull(result);
-        assertEquals(userResponse.getEmail(), result.getEmail());
-        verify(userDao).findByEmail(user.getEmail());
+        // Verificaciones
+        assertNotNull(result);  // Asegúrate de que no sea null
+        assertEquals(userResponse.getEmail(), result.getEmail());  // Compara los valores
+        assertEquals(userResponse.getUsername(), result.getUsername());  // Compara los valores
+        verify(userDao).findByEmail(user.getEmail());  // Verifica que findByEmail fue llamado
     }
 
     @Test
@@ -120,11 +130,16 @@ class UserSeriviceQueryImplTest {
     @DisplayName("Should return list of UserResponses matching given name")
     void findByName_shouldReturnUserResponses_whenUsersExist() {
         List<User> mockUsers = List.of(
-                new User("John", "john1@example.com", "password"),
-                new User("John", "john2@example.com", "password")
+                new User("John", "password", "john1@example.com"),
+                new User("John", "password", "john2@example.com")
         );
 
-        when(userDao.findAll()).thenReturn(mockUsers);
+        // Simulación del mapeo de User a UserResponse
+        when(userMapper.mapToUserResponse(any(User.class)))
+                .thenAnswer(invocation -> {
+                    User user = invocation.getArgument(0);
+                    return new UserResponse(user.getUsername(), user.getEmail());
+                });
 
         List<UserResponse> result = userServiceQuery.findByName("John");
 
