@@ -5,6 +5,9 @@ import com.apirest.finanzaspersonales.controller.model.response.UserResponse;
 import com.apirest.finanzaspersonales.entity.User;
 import com.apirest.finanzaspersonales.service.user.UserService;
 import com.apirest.finanzaspersonales.service.user.UserServiceQuery;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,11 +16,12 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
+    @Slf4j
     @RestController
-
     @RequestMapping("api/v1/users")
 
     public class UserController {
+        private static final Logger log = LogManager.getLogger(UserController.class);
         @Autowired
         private final UserService userService;
         private final UserServiceQuery userServiceQuery;
@@ -48,6 +52,7 @@ import java.util.Optional;
         // Registrar usuario
         @PostMapping("/register")
         public ResponseEntity<UserResponse> registerUser(@RequestBody UserRequest userRequest) {
+            log.info("Post register /register ");
             UserResponse newUser = userService.registerUser(userRequest);
             // Retorna un 201 Created con la ubicación del nuevo recurso
             return ResponseEntity
