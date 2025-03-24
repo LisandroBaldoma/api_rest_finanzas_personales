@@ -1,17 +1,17 @@
 package com.apirest.finanzaspersonales.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "categories")
-@Data
+@Table(name = "categories", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"name", "parent_category_id"})
+}) // Evita duplicados en el mismo padre
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class Category {
@@ -20,17 +20,18 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false, length = 50)
     private String name;
+
+    @Column(length = 255)
     private String description;
-    private boolean isActive;
+
+    private boolean isActive = true;
 
     @ManyToOne
     @JoinColumn(name = "parent_category_id")
-    @JsonBackReference // Evita la recursión infinita al serializar la categoría principal
-    private Category parentCategory; // Relación para árbol de categorías
+    private Category parentCategory;
 
-    @OneToMany(mappedBy = "parentCategory", cascade = CascadeType.ALL)
-    @JsonManagedReference // Gestiona la serialización de las subcategorías
-    private List<Category> subcategories; // Lista de subcategorías
-
+    @OneToMany(mappedBy = "parentCategory", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Category> subcategories = new ArrayList<>();
 }
