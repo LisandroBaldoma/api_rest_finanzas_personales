@@ -1,6 +1,7 @@
 package com.apirest.finanzaspersonales.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -30,7 +31,8 @@ public class Expense {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;  // Relación con User
 
-    //@ManyToOne
-    //@JoinColumn(name = "category_id", nullable = false)
-    //private Category category;  // Relación con Category
+    @ManyToOne
+    @JoinColumn(name = "category_id", nullable = false)
+    @JsonIgnore
+    private Category category;  // Relación con Category
 }
