@@ -1,8 +1,7 @@
 package com.apirest.finanzaspersonales.exceptions;
 
-public class EmailAlreadyExistsException extends RuntimeException{
-    public EmailAlreadyExistsException(String message) {
+public class AlreadyExistsException extends RuntimeException{
+    public AlreadyExistsException(String message) {
         super(message);
     }
-
 }
