@@ -3,7 +3,7 @@ package com.apirest.finanzaspersonales.service.user.imple;
 import com.apirest.finanzaspersonales.controller.user.model.request.UserRequest;
 import com.apirest.finanzaspersonales.controller.user.model.response.UserResponse;
 import com.apirest.finanzaspersonales.entity.User;
-import com.apirest.finanzaspersonales.exceptions.EmailAlreadyExistsException;
+import com.apirest.finanzaspersonales.exceptions.AlreadyExistsException;
 import com.apirest.finanzaspersonales.exceptions.NotFoundException;
 import com.apirest.finanzaspersonales.repository.user.UserRepository;
 import com.apirest.finanzaspersonales.utils.PasswordUtil;
@@ -132,7 +132,7 @@ class UserServiceImplTest {
         when(userDao.findByEmail(userRequest.getEmail())).thenReturn(user);
 
         // Verificar que se lanza la excepción
-        Exception exception = assertThrows(EmailAlreadyExistsException.class, () -> userService.registerUser(userRequest));
+        Exception exception = assertThrows(AlreadyExistsException.class, () -> userService.registerUser(userRequest));
         assertEquals("El correo ya está registrado.", exception.getMessage());
 
         // Verificar que se llamó a userDao.findByEmail

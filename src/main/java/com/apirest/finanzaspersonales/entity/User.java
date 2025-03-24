@@ -27,8 +27,8 @@ public class User {
     private String password;
 
     // Relación bidireccional con Expense
-    //@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    //private List<Expense> expenses = new ArrayList<>();
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Expense> expenses = new ArrayList<>();
 
 
 }
