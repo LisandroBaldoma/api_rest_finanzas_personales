@@ -1,11 +1,11 @@
 package com.apirest.finanzaspersonales.service.user.imple;
 
-import com.apirest.finanzaspersonales.controller.model.request.UserRequest;
-import com.apirest.finanzaspersonales.controller.model.response.UserResponse;
+import com.apirest.finanzaspersonales.controller.user.model.request.UserRequest;
+import com.apirest.finanzaspersonales.controller.user.model.response.UserResponse;
 import com.apirest.finanzaspersonales.entity.User;
-import com.apirest.finanzaspersonales.exceptions.User.EmailAlreadyExistsException;
-import com.apirest.finanzaspersonales.exceptions.User.UserNotFoundException;
-import com.apirest.finanzaspersonales.repository.user.UserDao;
+import com.apirest.finanzaspersonales.exceptions.EmailAlreadyExistsException;
+import com.apirest.finanzaspersonales.exceptions.NotFoundException;
+import com.apirest.finanzaspersonales.repository.user.UserRepository;
 import com.apirest.finanzaspersonales.utils.PasswordUtil;
 import com.apirest.finanzaspersonales.utils.UserMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -22,7 +22,7 @@ import static org.mockito.Mockito.*;
 class UserServiceImplTest {
 
     @Mock
-    private UserDao userDao;
+    private UserRepository userDao;
 
     @Mock
     private UserMapper userMapper; // Asegurar que está mockeado
@@ -107,7 +107,7 @@ class UserServiceImplTest {
     @DisplayName("registerUser_ShouldReturnUserResponse")
     void registerUser_ShouldReturnUserResponse() {
         // Simular el comportamiento de UserMapper
-        when(userMapper.maptoUser(userRequest)).thenReturn(user); // Usar mapToUser
+        when(userMapper.mapToUser(userRequest)).thenReturn(user); // Usar mapToUser
         when(userMapper.mapToUserResponse(user)).thenReturn(userResponse);
 
         // Simular el comportamiento de userDao.save
@@ -120,7 +120,7 @@ class UserServiceImplTest {
         assertNotNull(result);
         assertEquals("Licha", result.getUsername());
         assertEquals("licha@mail.com", result.getEmail());
-        verify(userMapper, times(1)).maptoUser(userRequest); // Usar mapToUser
+        verify(userMapper, times(1)).mapToUser(userRequest); // Usar mapToUser
         verify(userMapper, times(1)).mapToUserResponse(user);
         verify(userDao, times(1)).save(user);
     }
@@ -176,7 +176,7 @@ class UserServiceImplTest {
         when(userDao.delete(1)).thenReturn(false);
 
         // Verificar que se lanza la excepción
-        Exception exception = assertThrows(UserNotFoundException.class, () -> userService.removeUser(1));
+        Exception exception = assertThrows(NotFoundException.class, () -> userService.removeUser(1));
         assertEquals("Usuario con ID 1 no encontrado.", exception.getMessage());
 
         // Verificar que se llamó a userDao.delete

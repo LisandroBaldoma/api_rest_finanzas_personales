@@ -1,8 +1,7 @@
 package com.apirest.finanzaspersonales.repository.user.imple;
 
 import com.apirest.finanzaspersonales.entity.User;
-import com.apirest.finanzaspersonales.exceptions.User.InvalidUserException;
-import com.apirest.finanzaspersonales.repository.user.UserDao;
+import com.apirest.finanzaspersonales.repository.user.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public abstract class UserDaoTestBase {
 
-    protected UserDao userDao;
+    protected UserRepository userDao;
 
     @BeforeEach
     abstract void setUp();

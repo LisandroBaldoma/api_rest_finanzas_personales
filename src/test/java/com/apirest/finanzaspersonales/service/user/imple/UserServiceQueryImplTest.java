@@ -1,9 +1,9 @@
 package com.apirest.finanzaspersonales.service.user.imple;
 
-import com.apirest.finanzaspersonales.controller.model.response.UserResponse;
+import com.apirest.finanzaspersonales.controller.user.model.response.UserResponse;
 import com.apirest.finanzaspersonales.entity.User;
-import com.apirest.finanzaspersonales.exceptions.User.UserNotFoundException;
-import com.apirest.finanzaspersonales.repository.user.UserDao;
+import com.apirest.finanzaspersonales.exceptions.NotFoundException;
+import com.apirest.finanzaspersonales.repository.user.UserRepository;
 import com.apirest.finanzaspersonales.utils.UserMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -29,7 +29,7 @@ import static org.mockito.Mockito.when;
 class UserServiceQueryImplTest {
 
     @Mock
-    private UserDao userDao;
+    private UserRepository userDao;
 
     @Mock
     private UserMapper userMapper; // Mockear el UserMapper
@@ -93,7 +93,7 @@ class UserServiceQueryImplTest {
     void getUserByEmail_shouldThrowException_whenUserNotFound() {
         when(userDao.findByEmail(anyString())).thenReturn(null);
 
-        assertThrows(UserNotFoundException.class, () -> userServiceQuery.getUserByEmail("notfound@mail.com"));
+        assertThrows(NotFoundException.class, () -> userServiceQuery.getUserByEmail("notfound@mail.com"));
         verify(userDao).findByEmail("notfound@mail.com");
     }
 
@@ -153,7 +153,7 @@ class UserServiceQueryImplTest {
     void findByName_shouldThrowException_whenNoUsersFound() {
         when(userDao.findAll()).thenReturn(Collections.emptyList());
 
-        assertThrows(UserNotFoundException.class, () -> userServiceQuery.findByName("NonExistent"));
+        assertThrows(NotFoundException.class, () -> userServiceQuery.findByName("NonExistent"));
         verify(userDao).findAll();
     }
 }

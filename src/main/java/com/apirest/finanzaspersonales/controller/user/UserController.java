@@ -1,13 +1,10 @@
-package com.apirest.finanzaspersonales.controller;
+package com.apirest.finanzaspersonales.controller.user;
 
-import com.apirest.finanzaspersonales.controller.model.request.UserRequest;
-import com.apirest.finanzaspersonales.controller.model.response.UserResponse;
-import com.apirest.finanzaspersonales.entity.User;
-import com.apirest.finanzaspersonales.service.user.UserService;
+import com.apirest.finanzaspersonales.controller.user.model.request.UserRequest;
+import com.apirest.finanzaspersonales.controller.user.model.response.UserResponse;
 import com.apirest.finanzaspersonales.service.user.UserServiceQuery;
+import com.apirest.finanzaspersonales.service.user.imple.UserServiceImpl;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,12 +18,12 @@ import java.util.Optional;
     @RequestMapping("api/v1/users")
 
     public class UserController {
-        private static final Logger log = LogManager.getLogger(UserController.class);
+
         @Autowired
-        private final UserService userService;
+        private final UserServiceImpl userService;
         private final UserServiceQuery userServiceQuery;
 
-        public UserController(UserService userService, UserServiceQuery userServiceQuery) {
+        public UserController(UserServiceImpl userService, UserServiceQuery userServiceQuery) {
             this.userService = userService;
             this.userServiceQuery = userServiceQuery;
         }
@@ -40,7 +37,7 @@ import java.util.Optional;
 
         // Obtener un usuario por ID
         @GetMapping("/{id}")
-        public ResponseEntity<Optional<UserResponse>> getUserById(@PathVariable int id) {
+        public ResponseEntity<Optional<UserResponse>> getUserById(@PathVariable Long id) {
             Optional<UserResponse> user = userService.getUserById(id);
             if (user.isPresent()) {
                 return ResponseEntity.ok(user);
@@ -52,7 +49,7 @@ import java.util.Optional;
         // Registrar usuario
         @PostMapping("/register")
         public ResponseEntity<UserResponse> registerUser(@RequestBody UserRequest userRequest) {
-            log.info("Post register /register ");
+
             UserResponse newUser = userService.registerUser(userRequest);
             // Retorna un 201 Created con la ubicación del nuevo recurso
             return ResponseEntity
@@ -62,14 +59,14 @@ import java.util.Optional;
 
         // Actualizar usuario
         @PutMapping("/{id}")
-        public ResponseEntity<UserResponse> updateUser(@PathVariable int id, @RequestBody UserRequest userRequest) {
-            userRequest.setId(id);
-            Optional<UserResponse> updatedUser = userService.updateUser(userRequest);
+        public ResponseEntity<UserResponse> updateUser(@PathVariable Long id, @RequestBody UserRequest userRequest) {
+
+            Optional<UserResponse> updatedUser = userService.updateUser(id, userRequest);
             return updatedUser.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
         }
 
         @DeleteMapping("/{id}")
-        public ResponseEntity<String> deleteUser(@PathVariable int id) {
+        public ResponseEntity<String> deleteUser(@PathVariable Long id) {
             userService.removeUser(id);
             return ResponseEntity.noContent().build(); // Retorna 204 No Content
 

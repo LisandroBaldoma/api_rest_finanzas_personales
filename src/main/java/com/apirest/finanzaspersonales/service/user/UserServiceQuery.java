@@ -1,7 +1,6 @@
 package com.apirest.finanzaspersonales.service.user;
 
-import com.apirest.finanzaspersonales.controller.model.response.UserResponse;
-import com.apirest.finanzaspersonales.entity.User;
+import com.apirest.finanzaspersonales.controller.user.model.response.UserResponse;
 
 import java.util.List;
 

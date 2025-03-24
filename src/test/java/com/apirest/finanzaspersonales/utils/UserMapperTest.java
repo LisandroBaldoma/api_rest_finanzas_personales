@@ -1,7 +1,7 @@
 package com.apirest.finanzaspersonales.utils;
 
-import com.apirest.finanzaspersonales.controller.model.request.UserRequest;
-import com.apirest.finanzaspersonales.controller.model.response.UserResponse;
+import com.apirest.finanzaspersonales.controller.user.model.request.UserRequest;
+import com.apirest.finanzaspersonales.controller.user.model.response.UserResponse;
 import com.apirest.finanzaspersonales.entity.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -30,7 +30,7 @@ class UserMapperTest {
         request.setPassword("password123");
 
         // When
-        User user = userMapper.maptoUser(request); // Usar la instancia de UserMapper
+        User user = userMapper.mapToUser(request); // Usar la instancia de UserMapper
 
         // Then
         assertThat(user).isNotNull();
