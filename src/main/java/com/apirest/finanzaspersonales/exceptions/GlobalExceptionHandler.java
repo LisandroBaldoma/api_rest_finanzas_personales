@@ -49,4 +49,16 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
 
+    @ExceptionHandler(InvalidExpenseException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidExpenseException(InvalidExpenseException e) {
+        // Creamos el ErrorResponse con el mensaje de la excepción y un título apropiado
+        ErrorResponse errorResponse = new ErrorResponse(
+                "Datos inválidos en la solicitud",
+                Collections.singletonList(e.getMessage())  // Aquí se pasa el mensaje que incluye la información detallada
+        );
+
+        // Retornamos un 400 Bad Request con el mensaje
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+    }
+
 }

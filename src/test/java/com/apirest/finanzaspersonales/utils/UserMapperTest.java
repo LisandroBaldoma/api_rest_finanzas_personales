@@ -24,8 +24,8 @@ class UserMapperTest {
     void shouldMapUserRequestToUser() {
         // Given
         UserRequest request = new UserRequest();
-        request.setId(1);
-        request.setUsername("testUser");
+
+        request.setName("testUser");
         request.setEmail("test@example.com");
         request.setPassword("password123");
 
@@ -34,7 +34,7 @@ class UserMapperTest {
 
         // Then
         assertThat(user).isNotNull();
-        assertThat(user.getUsername()).isEqualTo("testUser");
+        assertThat(user.getName()).isEqualTo("testUser");
         assertThat(user.getEmail()).isEqualTo("test@example.com");
         assertThat(user.getPassword()).isEqualTo("password123");
     }
@@ -43,18 +43,17 @@ class UserMapperTest {
     void shouldMapUserRequestToUserUpdate() {
         // Given
         UserRequest request = new UserRequest();
-        request.setId(1);
-        request.setUsername("updatedUser");
+        request.setName("updatedUser");
         request.setEmail("updated@example.com");
         request.setPassword("newPassword");
 
         // When
-        User updatedUser = userMapper.maptoUserUpdate(request); // Usar la instancia de UserMapper
+        User updatedUser = userMapper.mapToUserUpdate(request); // Usar la instancia de UserMapper
 
         // Then
         assertThat(updatedUser).isNotNull();
         assertThat(updatedUser.getId()).isEqualTo(1);
-        assertThat(updatedUser.getUsername()).isEqualTo("updatedUser");
+        assertThat(updatedUser.getName()).isEqualTo("updatedUser");
         assertThat(updatedUser.getEmail()).isEqualTo("updated@example.com");
         assertThat(updatedUser.getPassword()).isEqualTo("newPassword");
     }
@@ -63,7 +62,7 @@ class UserMapperTest {
     void shouldMapUserToUserResponse() {
         // Given
         User user = new User();
-        user.setUserName("responseUser");
+        user.setName("responseUser");
         user.setEmail("response@example.com");
 
         // When
@@ -71,7 +70,7 @@ class UserMapperTest {
 
         // Then
         assertThat(response).isNotNull();
-        assertThat(response.getUsername()).isEqualTo("responseUser");
+        assertThat(response.getName()).isEqualTo("responseUser");
         assertThat(response.getEmail()).isEqualTo("response@example.com");
     }
 }
