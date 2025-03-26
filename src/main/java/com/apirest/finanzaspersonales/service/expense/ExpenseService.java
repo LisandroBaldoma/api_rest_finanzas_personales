@@ -1,13 +1,21 @@
 package com.apirest.finanzaspersonales.service.expense;
 
-import com.apirest.finanzaspersonales.entity.Expense;
+import com.apirest.finanzaspersonales.controller.expense.model.request.ExpenseRequest;
+import com.apirest.finanzaspersonales.controller.expense.model.response.ExpenseResponse;
 
 import java.util.List;
-import java.util.Optional;
+
 
 public interface ExpenseService {
-    Expense saveExpense(Expense expense);
-    Optional<Expense> getExpenseById(Long id);
-    List<Expense> getAllExpenses();
-    void deleteExpense(Long id);
+
+    List<ExpenseResponse> getExpenses();
+
+    ExpenseResponse getExpenseById(Long expenseId);
+
+    ExpenseResponse createExpense(ExpenseRequest request);
+
+    ExpenseResponse updateExpense(Long expenseId, ExpenseRequest request);
+
+    void deleteExpense(Long expenseId);
+
 }
