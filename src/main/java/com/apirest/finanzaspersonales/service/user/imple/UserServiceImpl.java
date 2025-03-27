@@ -8,10 +8,9 @@ import com.apirest.finanzaspersonales.repository.user.UserRepository;
 import com.apirest.finanzaspersonales.entity.User;
 import com.apirest.finanzaspersonales.service.user.UserService;
 import com.apirest.finanzaspersonales.utils.PasswordUtil;
-import com.apirest.finanzaspersonales.utils.UserMapper;
+import com.apirest.finanzaspersonales.utils.mappers.UserMapper;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

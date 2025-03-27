@@ -7,7 +7,8 @@ import com.apirest.finanzaspersonales.exceptions.AlreadyExistsException;
 import com.apirest.finanzaspersonales.exceptions.NotFoundException;
 import com.apirest.finanzaspersonales.repository.user.UserRepository;
 import com.apirest.finanzaspersonales.utils.PasswordUtil;
-import com.apirest.finanzaspersonales.utils.UserMapper;
+import com.apirest.finanzaspersonales.utils.mappers.UserMapper;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -38,6 +39,7 @@ class UserServiceImplTest {
     private UserServiceImpl userService;
 
     @Test
+    @DisplayName("getUserById")
     void getUserById_ShouldReturnUserResponse_WhenUserExists() {
         // Arrange
         Long userId = 1L;
@@ -58,6 +60,7 @@ class UserServiceImplTest {
     }
 
     @Test
+    @DisplayName("getUserById NotFound")
     void getUserById_ShouldThrowNotFoundException_WhenUserDoesNotExist() {
         // Arrange
         Long userId = 99L;
@@ -70,6 +73,7 @@ class UserServiceImplTest {
     }
 
     @Test
+    @DisplayName("getAllUsers")
     void getAllUsers_ShouldReturnListOfUserResponses() {
         // Arrange
         List<User> mockUsers = List.of(

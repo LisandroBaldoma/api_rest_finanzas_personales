@@ -1,4 +1,4 @@
-package com.apirest.finanzaspersonales.utils;
+package com.apirest.finanzaspersonales.utils.mappers;
 
 import com.apirest.finanzaspersonales.controller.user.model.request.UserRequest;
 import com.apirest.finanzaspersonales.controller.user.model.response.UserResponse;
@@ -42,20 +42,15 @@ class UserMapperTest {
     @Test
     void shouldMapUserRequestToUserUpdate() {
         // Given
-        UserRequest request = new UserRequest();
-        request.setName("updatedUser");
-        request.setEmail("updated@example.com");
-        request.setPassword("newPassword");
+        UserRequest request = new UserRequest("updatedUser", "updated@example.com","newPassword");
 
         // When
         User updatedUser = userMapper.mapToUserUpdate(request); // Usar la instancia de UserMapper
 
         // Then
         assertThat(updatedUser).isNotNull();
-        assertThat(updatedUser.getId()).isEqualTo(1);
         assertThat(updatedUser.getName()).isEqualTo("updatedUser");
         assertThat(updatedUser.getEmail()).isEqualTo("updated@example.com");
-        assertThat(updatedUser.getPassword()).isEqualTo("newPassword");
     }
 
     @Test

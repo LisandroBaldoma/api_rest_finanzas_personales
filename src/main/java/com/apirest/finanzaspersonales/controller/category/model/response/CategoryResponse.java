@@ -11,7 +11,19 @@ import lombok.Setter;
 @AllArgsConstructor
 
 public class CategoryResponse {
+    private Long id;
     private String name;
     private String description;
     private Long parentCategoryId;
+
+    public CategoryResponse(String name, String description) {
+        this.name = name;
+        this.description = description;
+    }
+
+    public CategoryResponse(String name, String description, Long parentCategoryId) {
+        this.name = name;
+        this.description = description;
+        this.parentCategoryId = parentCategoryId;
+    }
 }

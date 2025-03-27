@@ -39,4 +39,18 @@ public class ExpenseResponse {
 
     @NotBlank(message = "El nombre de la categoría no puede estar vacío")
     private String categoryName;
+
+    public ExpenseResponse(double amount, String currency, String paymentMethod, String description, String userName, String categoryName) {
+        this.amount = amount;
+        this.currency = currency;
+        this.paymentMethod = paymentMethod;
+        this.description = description;
+        this.userName = userName;
+        this.categoryName = categoryName;
+    }
+
+    public ExpenseResponse(double amount, String currency) {
+        this.amount = amount;
+        this.currency = currency;
+    }
 }

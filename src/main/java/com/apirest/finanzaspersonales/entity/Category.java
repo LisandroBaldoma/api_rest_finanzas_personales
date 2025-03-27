@@ -34,4 +34,12 @@ public class Category {
 
     @OneToMany(mappedBy = "parentCategory", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Category> subcategories = new ArrayList<>();
+
+    public Category(Long id, String name, String description, boolean isActive, Category parentCategory) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.isActive = isActive;
+        this.parentCategory = parentCategory;
+    }
 }

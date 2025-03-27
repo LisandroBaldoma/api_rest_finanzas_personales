@@ -1,4 +1,4 @@
-package com.apirest.finanzaspersonales.utils;
+package com.apirest.finanzaspersonales.utils.mappers;
 
 import com.apirest.finanzaspersonales.controller.category.model.request.CategoryRequest;
 import com.apirest.finanzaspersonales.controller.category.model.response.CategoryResponse;

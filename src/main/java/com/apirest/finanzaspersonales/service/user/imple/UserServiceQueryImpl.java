@@ -5,7 +5,7 @@ import com.apirest.finanzaspersonales.entity.User;
 import com.apirest.finanzaspersonales.exceptions.NotFoundException;
 import com.apirest.finanzaspersonales.repository.user.UserRepository;
 import com.apirest.finanzaspersonales.service.user.UserServiceQuery;
-import com.apirest.finanzaspersonales.utils.UserMapper;
+import com.apirest.finanzaspersonales.utils.mappers.UserMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 

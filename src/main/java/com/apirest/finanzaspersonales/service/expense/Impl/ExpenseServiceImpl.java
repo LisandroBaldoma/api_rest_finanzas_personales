@@ -12,7 +12,7 @@ import com.apirest.finanzaspersonales.repository.category.CategoryRepository;
 import com.apirest.finanzaspersonales.repository.expense.ExpenseRepository;
 import com.apirest.finanzaspersonales.repository.user.UserRepository;
 import com.apirest.finanzaspersonales.service.expense.ExpenseService;
-import com.apirest.finanzaspersonales.utils.ExpenseMapper;
+import com.apirest.finanzaspersonales.utils.mappers.ExpenseMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

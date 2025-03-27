@@ -34,4 +34,11 @@ public class ExpenseRequest {
 
     @NotNull(message = "El ID de la categoría es obligatorio")
     private Long categoryId;
+
+    public ExpenseRequest(double amount, String description, Long userId, Long categoryId) {
+        this.amount = amount;
+        this.description = description;
+        this.userId = userId;
+        this.categoryId = categoryId;
+    }
 }

@@ -14,6 +14,7 @@ import lombok.Setter;
 @AllArgsConstructor
 
 public class CategoryRequest {
+    private Long id;
     @NotBlank(message = "El nombre de la categoría es obligatorio")
     @Size(max = 50, message = "El nombre no puede tener más de 50 caracteres")
     private String name;
@@ -24,4 +25,11 @@ public class CategoryRequest {
 
     private boolean isActive;
     private Long parentCategory;
+
+    public CategoryRequest(String name, String description, Long parentCategory) {
+        this.name = name;
+        this.description = description;
+        this.parentCategory = parentCategory;
+    }
+
 }

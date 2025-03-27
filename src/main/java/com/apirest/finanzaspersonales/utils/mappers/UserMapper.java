@@ -1,4 +1,4 @@
-package com.apirest.finanzaspersonales.utils;
+package com.apirest.finanzaspersonales.utils.mappers;
 
 import com.apirest.finanzaspersonales.controller.user.model.request.UserRequest;
 import com.apirest.finanzaspersonales.controller.user.model.response.UserResponse;
@@ -23,6 +23,7 @@ public class UserMapper {
     }
 
     public UserResponse mapToUserResponse(User user){
+
         return new UserResponse(user.getName(), user.getEmail());
     }
 }

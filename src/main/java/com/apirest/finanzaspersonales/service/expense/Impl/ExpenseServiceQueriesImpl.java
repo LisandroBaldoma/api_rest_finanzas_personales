@@ -4,7 +4,7 @@ import com.apirest.finanzaspersonales.controller.expense.model.response.ExpenseR
 import com.apirest.finanzaspersonales.entity.Expense;
 import com.apirest.finanzaspersonales.repository.expense.ExpenseRepository;
 import com.apirest.finanzaspersonales.service.expense.ExpenseServiceQuery;
-import com.apirest.finanzaspersonales.utils.ExpenseMapper;
+import com.apirest.finanzaspersonales.utils.mappers.ExpenseMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

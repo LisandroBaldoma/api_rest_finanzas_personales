@@ -8,7 +8,7 @@ import com.apirest.finanzaspersonales.exceptions.AlreadyExistsException;
 import com.apirest.finanzaspersonales.repository.category.CategoryRepository;
 import com.apirest.finanzaspersonales.repository.expense.ExpenseRepository;
 import com.apirest.finanzaspersonales.service.category.CategoryService;
-import com.apirest.finanzaspersonales.utils.CategoryMapper;
+import com.apirest.finanzaspersonales.utils.mappers.CategoryMapper;
 import jakarta.transaction.Transactional;
 
 import org.springframework.stereotype.Service;

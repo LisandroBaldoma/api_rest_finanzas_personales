@@ -1,4 +1,4 @@
-package com.apirest.finanzaspersonales.utils;
+package com.apirest.finanzaspersonales.utils.mappers;
 
 import com.apirest.finanzaspersonales.controller.expense.model.request.ExpenseRequest;
 import com.apirest.finanzaspersonales.controller.expense.model.response.ExpenseResponse;

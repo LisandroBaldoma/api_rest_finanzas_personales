@@ -3,10 +3,6 @@ package com.apirest.finanzaspersonales.entity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
-import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -49,4 +45,13 @@ public class Expense {
         this.user = user;
         this.category = category;
     }
+
+    public Expense(Long id, double amount, String description, String currency) {
+        this.id = id;
+        this.amount = amount;
+        this.description = description;
+        this.currency = currency;
+    }
+
+
 }
