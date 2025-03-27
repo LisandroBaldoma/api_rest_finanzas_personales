@@ -62,7 +62,7 @@ Los usuarios pueden registrar y gestionar sus gastos personales mediante la API.
 
 1. Clonar el repositorio:
    ```sh
-   git clone <https://github.com/LisandroBaldoma/api_rest_finanzas_personales.git>
+   git clone https://github.com/LisandroBaldoma/api_rest_finanzas_personales.git
    ```
 2. Importar el proyecto en **IntelliJ IDEA**.
 3. Configurar la base de datos en `application.properties` si es necesario.
