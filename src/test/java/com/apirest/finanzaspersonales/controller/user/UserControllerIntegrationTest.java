@@ -55,8 +55,8 @@ public class UserControllerIntegrationTest {
     @DisplayName("GET /api/v1/users - Debe retornar 200 y lista de usuarios")
     void getAllUsers_ShouldReturnUsers() throws Exception {
         // Datos de prueba
-        UserResponse user1 = new UserResponse(1L, "User 1", "user1@example.com");
-        UserResponse user2 = new UserResponse(2L, "User 2", "user2@example.com");
+        UserResponse user1 = new UserResponse("User 1", "user1@example.com");
+        UserResponse user2 = new UserResponse("User 2", "user2@example.com");
         List<UserResponse> users = List.of(user1, user2);
 
         // Mock del servicio
@@ -115,7 +115,7 @@ public class UserControllerIntegrationTest {
         // Arrange: Datos de prueba
         Long userId = 1L;
         UserRequest request = new UserRequest("Updated User2", "updated@example.com", "password");
-        UserResponse response = new UserResponse(1L, "Updated User2", "updated@example.com");
+        UserResponse response = new UserResponse("Updated User2", "updated@example.com");
 
         // Configuramos el mock del servicio
         when(userService.updateUser(eq(userId), any(UserRequest.class))).thenReturn(response);
